@@ -7,8 +7,6 @@ import {
 } from "../lib/utils";
 import generateUserHash from "../lib/hashing";
 
-const registerRoute = Router();
-
 const validateGroupAffiliation = async (groupMail: string) => {
   const groupIdentifier = groupMail.split("@")[1];
   const result = await prisma.groups.findFirst({
@@ -28,6 +26,36 @@ const validateGroupAffiliation = async (groupMail: string) => {
   };
 };
 
+const checkUserExists = async (username: string) => {
+  const result = await prisma.user.findFirst({
+    where: {
+      username: username,
+    },
+  });
+  return result !== null;
+};
+
+const createUser = async (
+  username: string,
+  userHash: string,
+  groupIdentifier: string
+) => {
+  const result = await prisma.user.create({
+    data: {
+      username: username,
+      user_hash: userHash,
+      group: {
+        connect: {
+          group_identifier: groupIdentifier,
+        },
+      },
+    },
+  });
+  return result;
+};
+
+const registerRoute = Router();
+
 registerRoute.post("/", async (req: Request, res: Response) => {
   const { email, password, username } = req.body;
   if (
@@ -41,17 +69,14 @@ registerRoute.post("/", async (req: Request, res: Response) => {
     });
   }
   const userHash = generateUserHash(email, password);
-  const result = await prisma.user.create({
-    data: {
-      username: username,
-      user_hash: userHash,
-      group: {
-        connect: {
-          group_identifier: email.split("@")[1],
-        },
-      },
-    },
-  });
+  const userExists = await checkUserExists(username);
+  if (userExists) {
+    return res.json({
+      success: false,
+      message: "User already exists",
+    });
+  }
+  const result = await createUser(username, userHash, email.split("@")[1]);
   res.json({
     success: true,
     message: "User created",
