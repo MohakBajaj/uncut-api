@@ -36,7 +36,7 @@ export default function generateUserHash(
   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
 
   // Encrypt the concatenated data
-  let encryptedData = Buffer.concat([
+  const encryptedData = Buffer.concat([
     iv,
     cipher.update(hashedDataToEncrypt),
     cipher.final(),
