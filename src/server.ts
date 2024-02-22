@@ -6,7 +6,7 @@ dotenv.config();
 const app: Express = express();
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.json({message: "Hello Uncut"});
 });
 
 export default app;
