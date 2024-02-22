@@ -1,3 +1,5 @@
+# TODO:"Fix Bugs"
+
 # ---- Base Node ----
 FROM node:20.11.1-alpine AS base
 WORKDIR /usr/src/app
@@ -14,5 +16,6 @@ FROM node:14.20.1-alpine AS release
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/package.json ./package.json
 EXPOSE 3000
-CMD [ "pnpm", "start" ]
+CMD [ "npm", "run", "start" ]

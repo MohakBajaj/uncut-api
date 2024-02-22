@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+import { prisma } from "./lib/db";
 
 dotenv.config();
 
