@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:14.20.1-alpine AS base
+FROM node:20.11.1-alpine AS base
 WORKDIR /usr/src/app
 COPY package.json pnpm-lock.yaml ./
 
