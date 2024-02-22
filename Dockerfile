@@ -5,7 +5,7 @@ COPY package.json pnpm-lock.yaml ./
 
 # ---- Dependencies ----
 FROM base AS dependencies
-RUN npm install -g pnpm`
+RUN npm install -g pnpm
 RUN pnpm install
 
 # ---- Copy Files/Build ----
