@@ -8,6 +8,7 @@ import generateUserHash from "../../lib/hashing";
 import {
   checkUserExists,
   createUser,
+  saveTokenAndRefreshToken,
   validateGroupAffiliation,
 } from "./authUtils";
 
@@ -35,10 +36,12 @@ authRouter.post("/register", async (req: Request, res: Response) => {
       });
     }
     const result = await createUser(username, userHash, email.split("@")[1]);
+    const tokens = await saveTokenAndRefreshToken(result.username);
     res.json({
       success: true,
       message: "User created",
       user: result,
+      tokens,
     });
   } catch (error) {
     res.status(500).json({
