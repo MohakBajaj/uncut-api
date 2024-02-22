@@ -6,7 +6,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "test": "jest",
-    "dev": "nodemon --exec pnpx ts-node index.ts",
+    "dev": "nodemon --exec pnpx ts-node src/index.ts",
     "build": "tsc",
     "start": "npm run prisma:generate && npm run prisma:migrate && node dist/index.js",
     "prisma:generate": "prisma generate",
@@ -14,7 +14,7 @@
     "prisma:studio": "prisma studio"
   },
   "keywords": [],
-  "author": "Mohak Bajaj, Vasu Kansal, Mridul Singh",
+  "author": "Mohak Bajaj, Vasu Kansal, Mridul Singh, Sanskar Sisodia",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "5.10.2",
