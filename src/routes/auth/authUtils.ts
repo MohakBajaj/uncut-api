@@ -64,6 +64,22 @@ export const createUser = async (
   }
 };
 
+export const verifyUserHash = async (userHash: string) => {
+  try {
+    const result = await prisma.user.findFirst({
+      where: {
+        user_hash: userHash,
+      },
+    });
+    if (result === null) {
+      return false;
+    }
+    return result;
+  } catch (error) {
+    throw new Error("An error occurred while verifying user hash");
+  }
+};
+
 export const generateToken = async (username: string) => {
   const encoder = new TextEncoder();
   const serverSecret = encoder.encode(
@@ -83,10 +99,44 @@ export const generateToken = async (username: string) => {
 
 export const generateRefreshToken = async () => {
   const refreshToken = randomBytes(64);
-  return refreshToken.toString();
+  return refreshToken.toString("hex");
+};
+
+export const checkIfTokenExistsForUser = async (username: string) => {
+  try {
+    const result = await prisma.tokens.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    return result !== null;
+  } catch (error) {
+    throw new Error(
+      "An error occurred while checking if token exists for user"
+    );
+  }
 };
 
 export const saveTokenAndRefreshToken = async (username: string) => {
+  if (await checkIfTokenExistsForUser(username)) {
+    try {
+      // delete the existing token and refresh token
+      const result = await prisma.tokens.deleteMany({
+        where: {
+          username: username,
+        },
+      });
+      if (result === null) {
+        throw new Error(
+          "An error occurred while deleting token and refresh token"
+        );
+      }
+    } catch (error) {
+      throw new Error(
+        "An error occurred while deleting token and refresh token"
+      );
+    }
+  }
   const token = await generateToken(username);
   const refreshToken = await generateRefreshToken();
   try {
