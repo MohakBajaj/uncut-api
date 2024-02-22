@@ -6,8 +6,14 @@ dotenv.config();
 
 const app: Express = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.json({message: "Hello Uncut"});
+app.use(express.json());
+
+app.get("/", async (req: Request, res: Response) => {
+  res.json({
+    0: await prisma.groups.findMany(),
+    1: await prisma.user.findMany(),
+    2: await prisma.admins.findMany(),
+  });
 });
 
 export default app;
