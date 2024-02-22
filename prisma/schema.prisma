@@ -21,9 +21,9 @@ model Admins {
 }
 
 model Groups {
-  id              String @id @default(uuid())
-  group_name      String @unique
-  description     String
-  group_identifer String @unique
-  User            User[]
+  id               String @id @default(uuid())
+  group_name       String @unique
+  description      String
+  group_identifier String @unique
+  User             User[]
 }
