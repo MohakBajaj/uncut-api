@@ -1,13 +1,13 @@
 version: '3'
 services:
-  # express:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    # ports:
-    #   - 3000:3000
-    # depends_on:
-    #   - postgres
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
   postgres:
     image: postgres
     ports:
