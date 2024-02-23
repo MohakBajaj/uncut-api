@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import {
   validateEmail,
   validatePassword,
@@ -16,6 +16,14 @@ import {
 } from "./authUtils";
 
 const authRouter: Router = Router();
+
+authRouter.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  next();
+});
 
 authRouter.get(
   "/validateGroupAffiliation/:email",
