@@ -163,24 +163,6 @@ export const saveTokenAndRefreshToken = async (username: string) => {
   }
 };
 
-export const regenerateToken = async (refreshToken: string) => {
-  try {
-    const result = await prisma.tokens.findFirst({
-      where: {
-        refresh_token: refreshToken,
-      },
-    });
-    if (result === null) {
-      throw new Error("Refresh token not found");
-    }
-
-    const token = await generateToken(result.username);
-    return token;
-  } catch (error) {
-    throw new Error("An error occurred while regenerating token");
-  }
-};
-
 export const verifyToken = async (token: string) => {
   const encoder = new TextEncoder();
   const serverSecret = encoder.encode(
@@ -192,6 +174,15 @@ export const verifyToken = async (token: string) => {
       issuer: "Uncut",
       algorithms: ["HS256"],
     });
+    return result;
+  } catch (error) {
+    throw new Error("Invalid token");
+  }
+};
+
+export const decodeToken = (token: string) => {
+  try {
+    const result = jose.decodeJwt(token);
     return result;
   } catch (error) {
     throw new Error("Invalid token");

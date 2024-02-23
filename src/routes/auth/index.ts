@@ -8,8 +8,10 @@ import generateUserHash from "../../lib/hashing";
 import {
   checkUserExists,
   createUser,
+  decodeToken,
   saveTokenAndRefreshToken,
   validateGroupAffiliation,
+  verifyToken,
   verifyUserHash,
 } from "./authUtils";
 
@@ -102,6 +104,60 @@ authRouter.post("/login", async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "An error occurred while logging in user",
+    });
+  }
+});
+
+authRouter.post("/refreshToken", async (req: Request, res: Response) => {
+  try {
+    const { token, refreshToken } = req.body;
+    if (!token || !refreshToken) {
+      return res.json({
+        success: false,
+        message: "Invalid token or refresh token",
+      });
+    }
+    const decodedToken = decodeToken(token);
+    if (decodedToken === null) {
+      return res.json({
+        success: false,
+        message: "Invalid token",
+      });
+    }
+    const result = await saveTokenAndRefreshToken(
+      decodedToken.username as string
+    );
+    res.json({
+      success: true,
+      message: "Token refreshed",
+      tokens: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while refreshing token",
+    });
+  }
+});
+
+authRouter.post("/verifyToken", async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.json({
+        success: false,
+        message: "Invalid token",
+      });
+    }
+    const verified = await verifyToken(token);
+    res.json({
+      success: verified,
+      message: verified ? "Token verified" : "Token not verified",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while verifying token",
     });
   }
 });
