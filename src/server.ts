@@ -1,6 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
-import { prisma } from "./lib/db";
 import authRouter from "./routes/auth";
 import helmet from "helmet";
 import compression from "compression";
