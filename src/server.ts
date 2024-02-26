@@ -25,12 +25,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   const serverIdentity = process.env.SERVER_CONNECTION_SECRET;
 
   if (req.headers["x-server-identity"] !== serverIdentity) {
-    return res
-      .status(401)
-      .json({
-        message:
-          "Unauthorized! You are not allowed to send requests to this server",
-      });
+    return res.status(401).json({
+      message:
+        "Unauthorized! You are not allowed to send requests to this server",
+    });
   }
 
   next();
@@ -39,11 +37,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use("/auth", authRouter);
 
 app.get("/", async (req: Request, res: Response) => {
-  res.json({
-    0: await prisma.groups.findMany(),
-    1: await prisma.user.findMany(),
-    2: await prisma.admins.findMany(),
-  });
+  res.json({ message: "Hello from Uncut server!" });
 });
 
 export default app;
