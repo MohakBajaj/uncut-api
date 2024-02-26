@@ -3,12 +3,21 @@ import dotenv from "dotenv";
 import { prisma } from "./lib/db";
 import authRouter from "./routes/auth";
 import helmet from "helmet";
+import compression from "compression";
+import cors from "cors";
 
 dotenv.config();
 
 const app: Express = express();
 
+app.use(compression());
 app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(helmet());
 app.disable("x-powered-by");
 
