@@ -180,11 +180,18 @@ export const verifyToken = async (token: string) => {
   }
 };
 
-export const decodeToken = (token: string) => {
+export const verifyRefreshToken = async (refreshToken: string) => {
   try {
-    const result = jose.decodeJwt(token);
+    const result = await prisma.tokens.findFirst({
+      where: {
+        refresh_token: refreshToken,
+      },
+    });
+    if (result === null) {
+      return false;
+    }
     return result;
   } catch (error) {
-    throw new Error("Invalid token");
+    throw new Error("An error occurred while verifying refresh token");
   }
 };
