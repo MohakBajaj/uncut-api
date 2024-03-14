@@ -6,13 +6,7 @@ export function validateEmail(email: string): boolean {
 }
 
 export function validatePassword(password: string): boolean {
-  const passwordSchema = z
-    .string()
-    .min(8)
-    .max(50)
-    .regex(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_=+[\]{}|;:'",.<>?]).{8,50}$/
-    );
+  const passwordSchema = z.string().min(8).max(50);
   return passwordSchema.safeParse(password).success;
 }
 
