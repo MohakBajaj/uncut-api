@@ -12,7 +12,7 @@ COPY . .
 RUN pnpm install && pnpm run build
 
 # ---- Release ----
-FROM node:14.20.1-alpine AS release
+FROM node:14.21.0-alpine AS release
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
