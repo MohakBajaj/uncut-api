@@ -14,6 +14,7 @@ model User {
   group_affiliation String
   group             Groups   @relation(fields: [group_affiliation], references: [id])
   tokens            tokens[]
+  posts             Posts[]
 }
 
 model Admins {
@@ -35,4 +36,15 @@ model tokens {
   refresh_token String @unique
   username      String
   User          User   @relation(fields: [username], references: [username])
+}
+
+model Posts {
+  id         String   @id @default(uuid())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  content    String
+  likes      Int
+  dislikes   Int
+  tags       String[]
+  created_at DateTime @default(now())
 }

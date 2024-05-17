@@ -111,7 +111,7 @@ authRouter.post("/login", async (req: Request, res: Response) => {
 authRouter.get("/verifyToken", async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization;
-    console.log(token);
+    // console.log(token);
     if (!token) {
       return res.json({
         success: false,
