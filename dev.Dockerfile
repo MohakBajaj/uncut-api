@@ -1,4 +1,4 @@
-FROM node:20.13.0-alpine AS base
+FROM node:20.13-alpine AS base
 WORKDIR /usr/src/app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install
